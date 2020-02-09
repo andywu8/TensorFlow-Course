@@ -1,0 +1,37 @@
+import matplotlib.pyplot as plt 
+import tensorflow as tf
+from tensorflow import keras
+import numpy
+
+fashion_mnist = keras.datasets.fashion_mnist
+(train_images, train_labels), (test_images, test_labels) = fashion_mnist.load_data()
+
+plt.figure()
+plt.imshow(train_images[0])
+plt.colorbar()
+plt.grid(False)
+plt.show()
+
+model = keras.Sequential([ keras.layers.Flatten(input_shape=(28,28)), keras.layers.Dense(128, activation=tf.nn.relu), keras.layers.Dense(10, activation=tf.nn.softmax)])
+#flattens data into array
+model.compile( optimizer = 'adam', loss = 'sparse_categorical_crossentropy', metrics = ['accuracy'])
+#learned softmax functions, generates values between 0-1, which add to 1
+#relu functions, generate values between 0,1 and act as a layer
+
+model.fit(train_images, train_labels, epochs=5)
+#trains data, first argument is input data, second argument is classification, final argument is epochs undertaken during training cycle,epoch value of 5 means 60,00 training examples 5 times
+#trained 2 dense layers
+
+
+test_loss, test_acc = model.evaluate(test_images, test_labels)
+print(test_acc)
+#accuracy of .8721
+
+predictions = model.predict(test_images)
+predictions[0]
+#produces array
+
+numpy.argmax(predictions[0])
+test_labels[0]
+#labels represent probability that the image matches the corresponding label in our set
+
